@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>스타벅스</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+              integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+              crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap"
+              rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <style>
+            * {
+                font-family: 'Noto Serif KR', serif;
+            }
+
+            .wrapper {
+                width: 500px;
+                margin: 0 auto;
+            }
+
+            .img {
+                width: 600px;
+                height: 600px;
+                background-image: url('https://image.istarbucks.co.kr/upload/store/skuimg/2017/04/[9200000000487]_20170405152830688.jpg');
+                background-size: cover;
+                margin: 0 auto;
+            }
+
+            h1 {
+                margin: 20px 0 10px;
+                font-size: 30px;
+            }
+
+            h2 {
+                margin: 20px 0;
+                font-size: 24px;
+            }
+
+            .fx-rate-info {
+                color: cornflowerblue;
+            }
+
+            .btn-box {
+                text-align: center;
+            }
+
+            table {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 50px;
+            }
+
+            thead {
+                background: #eee;
+            }
+
+            thead tr {
+                height: 40px;
+            }
+
+            tbody tr {
+                height: 50px;
+                border-bottom: 1px solid #ddd;
+            }
+
+        </style>
+
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    url: 'https://api.manana.kr/exchange/rate.json',
+                    data: {},
+                    success: function (response) {
+                        let fxData = response[1].rate;
+                        $('#fx-rate').append(fxData);
+                    }
+                })
+            })
+
+            function order() {
+                let name = $('#name-input').val();
+                let amount = $('#inputGroupSelect01').val();
+                let address = $('#address').val();
+                let phone = $('#phone').val();
+
+                let innerHTML = `<tr>
+                                    <td>${name}</td>
+                                    <td>${amount}</td>
+                                    <td>${address}</td>
+                                    <td>${phone}</td>
+                                 </tr>`
+
+                if ($('#name-input').val() == '') {
+                    alert('성함을 입력해주세요');
+                } else if ($('#inputGroupSelect01').val() == 'none') {
+                    alert('수량을 선택해주세요');
+                } else if ($('#address').val() == '') {
+                    alert('주소를 입력해주세요');
+                } else if ($('#phone').val() == '') {
+                    alert('연락처를 입력해주세요');
+                } else {
+                    alert('주문이 완료되었습니다');
+                    $('#order-info').append(innerHTML);
+                }
+
+            }
+
+
+
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="img"></div>
+
+            <h1>바닐라 크림 콜드 브루</h1>
+            <p>
+                가격: 6,000원 / 1잔
+            </p>
+            <p class="fx-rate-info">
+                달러/원 환율: <span id="fx-rate"></span>
+            </p>
+            <p>
+                콜드 브루에 더해진 바닐라 크림으로 깔끔하면서 달콤한 콜드 브루를 새롭게 즐길 수 있는 음료입니다.<br>
+                제품 영양 정보: Tall(톨) / 355ml (12 fl oz)
+            </p>
+
+            <h2>주문하기</h2>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="name">주문자 성함</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1" id="name-input">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">수량</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01">
+                    <option selected value="none">-- 수량을 선택하세요 --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">주소</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1" id="address">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">전화번호</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1" id="phone">
+            </div>
+
+            <p class="btn-box">
+                <button class="btn btn-success" onclick="order()">주문하기</button>
+            </p>
+
+            <table>
+                <thead>
+                <tr>
+                    <td>이름</td>
+                    <td>수량</td>
+                    <td>주소</td>
+                    <td>전화번호</td>
+                </tr>
+                </thead>
+                <tbody id="order-info">
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
